@@ -157,7 +157,7 @@ for (ipr in seq_along(pSeq)) {
          type = 'b',
          log = 'y',
          pch = pchs[ipr],
-         col = cols[ipr],
+         col = gPars$cols[ipr],
          xlim = c(-0.1,0.1),
          xlab = expression(nu[p]-p),
          ylim = c(100,2000),
@@ -169,7 +169,7 @@ for (ipr in seq_along(pSeq)) {
     points(ys-p,xs,
            type = 'b',
            pch = pchs[ipr],
-           col = cols[ipr])
+           col = gPars$cols[ipr])
   }
 }
 legend(
@@ -179,7 +179,7 @@ legend(
   cex = 0.8,
   lty = 1,
   pch = pchs,
-  col = cols
+  col = gPars$cols
 )
 box()
 dev.off()
