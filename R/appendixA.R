@@ -298,6 +298,7 @@ X = resuH[sel]
 Y = resmH[sel]
 ErrViewLib::plotEvsPU(
   X , Y ,
+  xlim = c(0,0.04),
   runQuant = TRUE,
   cumMAE = TRUE,
   scalePoints = scalePoints,
@@ -392,6 +393,7 @@ X = resuH[sel]
 Y = resmH[sel]
 ErrViewLib::plotEvsPU(
   X , Y ,
+  xlim = c(0,0.03),
   runQuant = TRUE,
   cumMAE = TRUE,
   scalePoints = scalePoints,

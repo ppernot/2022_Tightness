@@ -19,7 +19,7 @@ testBPCI = function(S,M,p,method = "wilsoncc") {
 }
 
 # Datasets ####
-set.seed(123)
+set.seed(1234)
 N   = 1000
 
 # s2   = rchisq(N, df = 4)
@@ -62,6 +62,7 @@ png(file = paste0(figDir,'/Fig_01a.png'),
 ErrViewLib::plotEvsPU(
   SYNT01$uE, SYNT01$E,
   label = 1,
+  xlim = c(0,0.06),
   title = 'SYNT01',
   scalePoints = scalePoints,
   gPars = gPars
@@ -76,6 +77,7 @@ ErrViewLib::plotEvsPU(
   cumMAE = TRUE,
   # logX = TRUE,
   label = 2,
+  xlim = c(0,0.06),
   title = 'SYNT01',
   scalePoints = scalePoints,
   gPars = gPars
@@ -88,6 +90,7 @@ ErrViewLib::plotEvsPU(
   SYNT02$uE, SYNT02$E,
   runExt = TRUE,
   cumMAE = TRUE,
+  xlim = c(0,0.06),
   ylim = c(-0.15,0.15),
   label = 3,
   title = 'SYNT02',
@@ -569,13 +572,15 @@ ErrViewLib::plotEvsPU(
   title = 'BAK2021',
   xlab = 'Prediction uncertainty, U95',
   scalePoints = scalePoints,
+  label = 1,
   gPars = gPars)
 dev.off()
 
-png(file = paste0(figDir,'/Fig_07b.png'),
+png(file = paste0(figDir,'/Fig_07d.png'),
     width = gPars$reso, height = gPars$reso)
 ErrViewLib::plotConfidence(
   E, uE,
+  label = 4,
   gPars = gPars)
 dev.off()
 
@@ -615,22 +620,24 @@ Ref   = tab[ord, 2]
 E     = Ref - Calc
 uE    = uCalc
 
-png(file = paste0(figDir,'/Fig_07c.png'),
+png(file = paste0(figDir,'/Fig_07b.png'),
     width = gPars$reso, height = gPars$reso)
 ErrViewLib::plotEvsPU(
   uE, E,
   runQuant = TRUE,
   logX = TRUE,
   title = 'PAN2015',
+  label = 2,
   scalePoints = scalePoints,
   gPars = gPars)
 dev.off()
 
-png(file = paste0(figDir,'/Fig_07d.png'),
+png(file = paste0(figDir,'/Fig_07e.png'),
     width = gPars$reso, height = gPars$reso)
 ErrViewLib::plotConfidence(
   E, uE,
   ylim = c(0,1.2),
+  label = 5,
   gPars = gPars)
 dev.off()
 
@@ -645,13 +652,14 @@ uCalc = dat[['sigma']]
 E   = Ref - Calc
 uE  = uCalc
 
-png(file = paste0(figDir,'/Fig_07e.png'),
+png(file = paste0(figDir,'/Fig_07c.png'),
     width = gPars$reso, height = gPars$reso)
 ErrViewLib::plotEvsPU(
   uE, E,
   runQuant = TRUE,
   logX = TRUE,
   title = 'PAR2019',
+  label = 3,
   scalePoints = scalePoints,
   gPars = gPars)
 dev.off()
@@ -661,6 +669,7 @@ png(file = paste0(figDir,'/Fig_07f.png'),
 ErrViewLib::plotConfidence(
   E, uE,
   ylim = c(0,1.2),
+  label = 6,
   gPars = gPars)
 dev.off()
 
@@ -674,16 +683,24 @@ R = D[,2]
 V = D[,3]
 uE = uV = D[,4] / sqrt(N)
 E = R-V
-Z = E / uE; var(Z)
+Z = E / uE
 
 # Correct linear trend
 reg = lm(E~V)
 uEb = uE
 Eb  = residuals(reg)
-Zb  = Eb / uEb; var(Zb)
+Zb  = Eb / uEb
 
-# Missing uncertainty
-sqrt(var(Eb) - mean(uEb^2))
+# Impact of mean experimental uncertainty on Var(Z)
+ErrViewLib::varZCI(Z,method = "cho")
+uE_aug = sqrt(uE^2+0.4^2)
+ErrViewLib::varZCI(E/uE_aug,method = "cho")
+
+ErrViewLib::varZCI(Zb,method = "cho")
+uEb_aug = sqrt(uEb^2+0.4^2)
+ErrViewLib::varZCI(Eb/uEb_aug,method = "cho")
+
+
 
 xlab1 = expression(Calculated~paste(Delta,Delta,G)~group("[",kcal/mol,"]"))
 
@@ -805,32 +822,65 @@ ErrViewLib::plotEvsPU(
 )
 dev.off()
 
+# png(file = paste0(figDir,'/Fig_08f.png'),
+#     width = gPars$reso, height = gPars$reso)
+# ErrViewLib::plotCalVar(
+#   uE, E,
+#   slide = FALSE,
+#   nBoot = 1500,
+#   logX = TRUE,
+#   nBin = 10,
+#   label = 6,
+#   col = 2,
+#   # legend = 'Orig. data',
+#   gPars = gPars
+# )
+# ErrViewLib::plotCalVar(
+#   uEb, Eb,
+#   slide = FALSE,
+#   nBoot = 1500,
+#   logX = TRUE,
+#   nBin = 10,
+#   add = TRUE,
+#   col = 5,
+#   # legend = 'Orig. data',
+#   gPars = gPars
+# )
+# legend(
+#   'bottomright', bty='n',
+#   legend = c('Orig. data','Corr. data'),
+#   col = gPars$cols[c(2,5)],
+#   lwd = gPars$lwd,
+#   lty = 3,
+#   pch = 16
+# )
+# dev.off()
+
 png(file = paste0(figDir,'/Fig_08f.png'),
     width = gPars$reso, height = gPars$reso)
-ErrViewLib::plotCalVar(
-  uE, E,
-  slide = FALSE,
-  nBoot = 1500,
-  logX = TRUE,
+ErrViewLib::plotLZV(
+  V, Z,
   nBin = 10,
-  label = 6,
+  method = 'cho',
+  slide = TRUE,
+  xlab = xlab1,
+  ylim = c(0,400),
   col = 2,
-  # legend = 'Orig. data',
+  varZ = 2,
+  label = 6,
   gPars = gPars
 )
-ErrViewLib::plotCalVar(
-  uEb, Eb,
-  slide = FALSE,
-  nBoot = 1500,
-  logX = TRUE,
+ErrViewLib::plotLZV(
+  V, Zb,
   nBin = 10,
-  add = TRUE,
+  method = 'cho',
+  slide = TRUE,
   col = 5,
-  # legend = 'Orig. data',
+  add = TRUE,
   gPars = gPars
 )
 legend(
-  'bottomright', bty='n',
+  'topleft', bty='n',
   legend = c('Orig. data','Corr. data'),
   col = gPars$cols[c(2,5)],
   lwd = gPars$lwd,
