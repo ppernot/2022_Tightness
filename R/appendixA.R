@@ -112,7 +112,7 @@ Y = resm[['Normal']][sel]
 ErrViewLib::plotEvsPU(
   X , Y ,
   runQuant = TRUE,
-  cumMAE = TRUE,
+  # cumMAE = TRUE,
   scalePoints = scalePoints,
   label = 1,
   gPars = gPars
@@ -126,6 +126,9 @@ E  = resm[['Normal']]
 ErrViewLib::plotConfidence(
   E, uE,
   legend = 'Noisy data',
+  oracle = FALSE,
+  probref = TRUE,
+  conf_probref = TRUE,
   label = 2, ylim = c(0,1.1),
   gPars = gPars
 )
@@ -164,7 +167,7 @@ png(file = paste0(figDir,'/Fig_A03e.png'),
     width = gPars$reso, height = gPars$reso)
 uE = resu[['Normal']]
 E  = resm[['Normal']]
-ErrViewLib::plotCalVar(
+ErrViewLib::plotRelDiag(
   uE, E,
   nBin = 10,
   nBoot = 1000,
@@ -300,7 +303,7 @@ ErrViewLib::plotEvsPU(
   X , Y ,
   xlim = c(0,0.04),
   runQuant = TRUE,
-  cumMAE = TRUE,
+  # cumMAE = TRUE,
   scalePoints = scalePoints,
   label = 1,
   # xlim = c(0,3),
@@ -315,24 +318,12 @@ png(file = paste0(figDir,'/Fig_A04b.png'),
 ErrViewLib::plotConfidence(
   resmH, resuH,
   legend = 'Noisy data',
-  # ylab = 'MAE',
+  oracle = FALSE,
+  probref = TRUE,
+  conf_probref = TRUE,
   label = 2,
   gPars = gPars
 )
-ErrViewLib::plotConfidence(
-  reseH, ressH,
-  add = TRUE,
-  col = 5,
-  gPars = gPars
-)
-legend(
-    6, 0.1, bty='n',
-    legend = '  Clean data',
-    col = gPars$cols[5],
-    lwd = 2*gPars$lwd,
-    lty = 1,
-    pch = NA
-  )
 dev.off()
 
 png(file = paste0(figDir,'/Fig_A04c.png'),
@@ -395,7 +386,7 @@ ErrViewLib::plotEvsPU(
   X , Y ,
   xlim = c(0,0.03),
   runQuant = TRUE,
-  cumMAE = TRUE,
+  # cumMAE = TRUE,
   scalePoints = scalePoints,
   label = 1,
   # xlim = c(0,3),
@@ -410,23 +401,11 @@ png(file = paste0(figDir,'/Fig_A05b.png'),
 ErrViewLib::plotConfidence(
   resmH, resuH,
   legend = 'Noisy data',
-  # ylab = 'MAE',
+  oracle = FALSE,
+  probref = TRUE,
+  conf_probref = TRUE,
   label = 2,
   gPars = gPars
-)
-ErrViewLib::plotConfidence(
-  reseH, ressH,
-  add = TRUE,
-  col = 5,
-  gPars = gPars
-)
-legend(
-  6, 0.1, bty='n',
-  legend = '  Clean data',
-  col = gPars$cols[5],
-  lwd = 2*gPars$lwd,
-  lty = 1,
-  pch = NA
 )
 dev.off()
 

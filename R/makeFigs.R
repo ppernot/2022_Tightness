@@ -55,6 +55,31 @@ summary(lm(y~0+x))
 summary(lm(y~x))
 cor(x,y)^2
 
+write.table(
+  SYNT01,
+  file = '../Data/SYNT01_data.csv',
+  row.names = FALSE,
+  sep = ','
+)
+write.table(
+  SYNT02,
+  file = '../Data/SYNT02_data.csv',
+  row.names = FALSE,
+  sep = ','
+)
+write.table(
+  SYNT03,
+  file = '../Data/SYNT03_data.csv',
+  row.names = FALSE,
+  sep = ','
+)
+write.table(
+  SYNT04,
+  file = '../Data/SYNT04_data.csv',
+  row.names = FALSE,
+  sep = ','
+)
+
 
 # Fig_01 ####
 png(file = paste0(figDir,'/Fig_01a.png'),
@@ -74,7 +99,7 @@ png(file = paste0(figDir,'/Fig_01b.png'),
 ErrViewLib::plotEvsPU(
   SYNT01$uE, SYNT01$E,
   runQuant = TRUE,
-  cumMAE = TRUE,
+  # cumMAE = TRUE,
   # logX = TRUE,
   label = 2,
   xlim = c(0,0.06),
@@ -89,7 +114,7 @@ png(file = paste0(figDir,'/Fig_01c.png'),
 ErrViewLib::plotEvsPU(
   SYNT02$uE, SYNT02$E,
   runExt = TRUE,
-  cumMAE = TRUE,
+  # cumMAE = TRUE,
   xlim = c(0,0.06),
   ylim = c(-0.15,0.15),
   label = 3,
@@ -365,7 +390,7 @@ dev.off()
 png(file = paste0(figDir,'/Fig_05b.png'),
     width = gPars$reso, height = gPars$reso)
 lims = c(0.002,0.03)
-ErrViewLib::plotCalVar(
+ErrViewLib::plotRelDiag(
   SYNT01$uE, SYNT01$E,
   slide = FALSE,
   nBoot = 1500,
@@ -377,7 +402,7 @@ ErrViewLib::plotCalVar(
   col = 2,
   gPars = gPars
 )
-ErrViewLib::plotCalVar(
+ErrViewLib::plotRelDiag(
   SYNT02$uE, SYNT02$E,
   slide = FALSE,
   nBoot = 1500,
@@ -400,7 +425,9 @@ png(file = paste0(figDir,'/Fig_05c.png'),
     width = gPars$reso, height = gPars$reso)
 ErrViewLib::plotConfidence(
   SYNT01$E, SYNT01$uE,
-  # legend = 'SYNT01',
+  probref = TRUE,
+  conf_probref = TRUE,
+  legend = 'SYNT01',
   ylim = c(0,1.1),
   label = 3,
   gPars = gPars
@@ -412,11 +439,11 @@ ErrViewLib::plotConfidence(
   gPars = gPars
 )
 legend(
-  'bottomleft', bty='n',
-  legend = c('Oracle','SYNT01','SYNT02'),
-  col = gPars$cols[c(1,2,5)],
-  lwd = 2*gPars$lwd,
-  lty = c(2,1,1),
+  5, 0.13, bty='n',
+  legend = 'SYNT02',
+  col = gPars$cols[5],
+  lwd = gPars$lwd,
+  lty = 1,
   pch = NA
 )
 dev.off()
@@ -526,26 +553,26 @@ dev.off()
 png(file = paste0(figDir,'/Fig_06d.png'),
     width = gPars$reso, height = gPars$reso)
 ErrViewLib::plotConfidence(
-  E, ua,
+  E, ua/1.96,
+  oracle = FALSE,
+  probref = TRUE,
+  conf_probref = TRUE,
   legend = 'Model a',
-  type = 'p',
   label = 4,
   gPars = gPars
 )
+dev.off()
+
+png(file = paste0(figDir,'/Fig_06e.png'),
+    width = gPars$reso, height = gPars$reso)
 ErrViewLib::plotConfidence(
-  E, ub,
-  add = TRUE,
-  col = 5,
-  type = 'l',
+  E, ub/1.96,
+  oracle = FALSE,
+  probref = TRUE,
+  conf_probref = TRUE,
+  legend = 'Model b',
+  label = 5,
   gPars = gPars
-)
-legend(
-  6, 0.1, bty='n',
-  legend = '  Model b',
-  col = gPars$cols[5],
-  lwd = 2*gPars$lwd,
-  lty = 1,
-  pch = NA
 )
 dev.off()
 
@@ -580,6 +607,9 @@ png(file = paste0(figDir,'/Fig_07d.png'),
     width = gPars$reso, height = gPars$reso)
 ErrViewLib::plotConfidence(
   E, uE,
+  oracle = FALSE,
+  probref = TRUE,
+  conf_probref = TRUE,
   label = 4,
   gPars = gPars)
 dev.off()
@@ -636,6 +666,9 @@ png(file = paste0(figDir,'/Fig_07e.png'),
     width = gPars$reso, height = gPars$reso)
 ErrViewLib::plotConfidence(
   E, uE,
+  oracle = FALSE,
+  probref = TRUE,
+  conf_probref = TRUE,
   ylim = c(0,1.2),
   label = 5,
   gPars = gPars)
@@ -668,6 +701,9 @@ png(file = paste0(figDir,'/Fig_07f.png'),
     width = gPars$reso, height = gPars$reso)
 ErrViewLib::plotConfidence(
   E, uE,
+  oracle = FALSE,
+  probref = TRUE,
+  conf_probref = TRUE,
   ylim = c(0,1.2),
   label = 6,
   gPars = gPars)
@@ -748,7 +784,6 @@ ErrViewLib::plotEvsPU(
   xlab = xlab,
   ylim = c(-4,4),
   ylab = ylab,
-  # title = 'Model a',
   scalePoints = scalePoints,
   label = 2,
   gPars = gPars
@@ -759,6 +794,9 @@ png(file = paste0(figDir,'/Fig_08c.png'),
     width = gPars$reso, height = gPars$reso)
 ErrViewLib::plotConfidence(
   E, uE,
+  oracle = FALSE,
+  probref = TRUE,
+  conf_probref = TRUE,
   legend = 'Orig. data',
   label = 3,
   gPars = gPars
@@ -770,8 +808,8 @@ ErrViewLib::plotConfidence(
   gPars = gPars
 )
 legend(
-  6, 0.1, bty='n',
-  legend = '  Corr. data',
+  5, 0.12, bty='n',
+  legend = 'Corr. data',
   col = gPars$cols[5],
   lwd = 2*gPars$lwd,
   lty = 1,
@@ -824,7 +862,7 @@ dev.off()
 
 # png(file = paste0(figDir,'/Fig_08f.png'),
 #     width = gPars$reso, height = gPars$reso)
-# ErrViewLib::plotCalVar(
+# ErrViewLib::plotRelDiag(
 #   uE, E,
 #   slide = FALSE,
 #   nBoot = 1500,
@@ -835,7 +873,7 @@ dev.off()
 #   # legend = 'Orig. data',
 #   gPars = gPars
 # )
-# ErrViewLib::plotCalVar(
+# ErrViewLib::plotRelDiag(
 #   uEb, Eb,
 #   slide = FALSE,
 #   nBoot = 1500,
@@ -929,33 +967,9 @@ xlab = 'uE [kcal/mol]'
 runExt = FALSE
 runQuant = TRUE
 cumMAE = FALSE
-logX = TRUE
 ylab = 'Error [kcal/mol]'
 
 png(file = paste0(figDir,'/Fig_09a.png'),
-    width = gPars$reso, height = gPars$reso)
-ErrViewLib::plotConfidence(
-  Ea, uEa,
-  legend = 'AIQM1',
-  label = 1,
-  gPars = gPars
-)
-ErrViewLib::plotConfidence(
-  Eb, uEb,
-  add = TRUE,
-  col = 5,
-  gPars = gPars
-)
-legend(
-  6, 0.1, bty='n',
-  legend = '  ANI-1ccx',
-  col = gPars$cols[5],
-  lwd = 2*gPars$lwd,
-  lty = 1,
-  pch = NA
-)
-dev.off()
-png(file = paste0(figDir,'/Fig_09b.png'),
     width = gPars$reso, height = gPars$reso)
 ErrViewLib::plotEvsPU(
   uEa, Ea,
@@ -969,12 +983,12 @@ ErrViewLib::plotEvsPU(
   ylab = ylab,
   scalePoints = scalePoints,
   title = 'AIQM1',
-  label = 2,
+  label = 1,
   gPars = gPars
 )
 dev.off()
 
-png(file = paste0(figDir,'/Fig_09c.png'),
+png(file = paste0(figDir,'/Fig_09b.png'),
     width = gPars$reso, height = gPars$reso)
 ErrViewLib::plotEvsPU(
   uEb, Eb,
@@ -988,16 +1002,44 @@ ErrViewLib::plotEvsPU(
   ylab = ylab,
   scalePoints = scalePoints,
   title = 'ANI-1ccx',
+  label = 2,
+  gPars = gPars
+)
+dev.off()
+
+png(file = paste0(figDir,'/Fig_09c.png'),
+    width = gPars$reso, height = gPars$reso)
+ErrViewLib::plotConfidence(
+  Ea, uEa,
+  oracle = FALSE,
+  probref = TRUE,
+  conf_probref = TRUE,
+  legend = 'AIQM1',
   label = 3,
+  legLoc = 'topright',
   gPars = gPars
 )
 dev.off()
 
 png(file = paste0(figDir,'/Fig_09d.png'),
     width = gPars$reso, height = gPars$reso)
+ErrViewLib::plotConfidence(
+  Eb, uEb,
+  oracle = FALSE,
+  probref = TRUE,
+  conf_probref = TRUE,
+  legend = 'ANI-1ccx',
+  legLoc = 'topright',
+  label = 4,
+  gPars = gPars
+)
+dev.off()
+
+png(file = paste0(figDir,'/Fig_09e.png'),
+    width = gPars$reso, height = gPars$reso)
 
 lims = c(0.04,60)
-ErrViewLib::plotCalVar(
+ErrViewLib::plotRelDiag(
   uEa, Ea,
   slide = FALSE,
   nBoot = 1500,
@@ -1008,7 +1050,7 @@ ErrViewLib::plotCalVar(
   col = 2,
   gPars = gPars
 )
-ErrViewLib::plotCalVar(
+ErrViewLib::plotRelDiag(
   uEb, Eb,
   slide = FALSE,
   nBoot = 1500,
