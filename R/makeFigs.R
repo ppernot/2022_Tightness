@@ -576,43 +576,107 @@ ErrViewLib::plotConfidence(
 )
 dev.off()
 
-# Fig_07 ####
 
-## BAK2021 ####
-D = read.table('../Data/BAK2021_Data.csv',
+# Fig_07 ####
+numFig = '07'
+
+D = read.table('../Data/BAK2022_Data.csv',
                sep = ",", header = TRUE,
                check.names = FALSE,
                stringsAsFactors = FALSE)
-systems = D[,1]
-R  = D[,2]
+R  = D[,1]
+uR = D[,2] # U95
 C  = D[,3]
 uC = D[,4] # U95
 E  = R-C
-uE = uC
+# E = E - mean(E)
+uE = sqrt(uR^2+uC^2)
 
-png(file = paste0(figDir,'/Fig_07a.png'),
+sel = which(uC < 0.7)
+sqrt(mean(uR[sel]^2))
+sqrt(mean(uC[sel]^2))
+
+png(file = paste0(figDir,'/Fig_',numFig,'a.png'),
     width = gPars$reso, height = gPars$reso)
 ErrViewLib::plotEvsPU(
   uE, E,
   runQuant = TRUE,
   logX  = TRUE,
-  title = 'BAK2021',
-  xlab = 'Prediction uncertainty, U95',
+  title = 'BAK2022',
+  xlab = 'Prediction uncertainty, U95 [kcal/mol]',
+  ylab = 'Error, E [kcal/mol]',
   scalePoints = scalePoints,
   label = 1,
   gPars = gPars)
 dev.off()
 
-png(file = paste0(figDir,'/Fig_07d.png'),
+png(file = paste0(figDir,'/Fig_',numFig,'b.png'),
+    width = gPars$reso, height = gPars$reso)
+ErrViewLib::plotLCP(
+  E, uE,
+  ordX = uE,
+  logX = TRUE,
+  slide = TRUE,
+  nBin = 4,
+  mycols = 2,
+  # title = 'SYNT03',
+  xlab = 'Expanded Uncertainty [kcal/mol]',
+  ylim = c(0.8,1),
+  label = 2,
+  gPars = gPars
+)
+dev.off()
+
+png(file = paste0(figDir,'/Fig_',numFig,'c.png'),
     width = gPars$reso, height = gPars$reso)
 ErrViewLib::plotConfidence(
   E, uE,
   oracle = FALSE,
   probref = TRUE,
   conf_probref = TRUE,
-  label = 4,
+  rep_probref = 500,
+  label = 3,
   gPars = gPars)
 dev.off()
+
+# Fig_08 ####
+numFig = '08'
+
+# ## BAK2021 ####
+# D = read.table('../Data/BAK2021_Data.csv',
+#                sep = ",", header = TRUE,
+#                check.names = FALSE,
+#                stringsAsFactors = FALSE)
+# systems = D[,1]
+# R  = D[,2]
+# C  = D[,3]
+# uC = D[,4] # U95
+# E  = R-C
+# uE = uC
+#
+# png(file = paste0(figDir,'/Fig_',numFig,'a.png'),
+#     width = gPars$reso, height = gPars$reso)
+# ErrViewLib::plotEvsPU(
+#   uE, E,
+#   runQuant = TRUE,
+#   logX  = TRUE,
+#   title = 'BAK2021',
+#   xlab = 'Prediction uncertainty, U95',
+#   scalePoints = scalePoints,
+#   label = 1,
+#   gPars = gPars)
+# dev.off()
+#
+# png(file = paste0(figDir,'/Fig_',numFig,'d.png'),
+#     width = gPars$reso, height = gPars$reso)
+# ErrViewLib::plotConfidence(
+#   E, uE,
+#   oracle = FALSE,
+#   probref = TRUE,
+#   conf_probref = TRUE,
+#   label = 4,
+#   gPars = gPars)
+# dev.off()
 
 ## PAN2015 ####
 fileName = '../Data/PAN2015_Data.csv'
@@ -650,19 +714,19 @@ Ref   = tab[ord, 2]
 E     = Ref - Calc
 uE    = uCalc
 
-png(file = paste0(figDir,'/Fig_07b.png'),
+png(file = paste0(figDir,'/Fig_',numFig,'a.png'),
     width = gPars$reso, height = gPars$reso)
 ErrViewLib::plotEvsPU(
   uE, E,
   runQuant = TRUE,
   logX = TRUE,
   title = 'PAN2015',
-  label = 2,
+  label = 1,
   scalePoints = scalePoints,
   gPars = gPars)
 dev.off()
 
-png(file = paste0(figDir,'/Fig_07e.png'),
+png(file = paste0(figDir,'/Fig_',numFig,'b.png'),
     width = gPars$reso, height = gPars$reso)
 ErrViewLib::plotConfidence(
   E, uE,
@@ -670,7 +734,7 @@ ErrViewLib::plotConfidence(
   probref = TRUE,
   conf_probref = TRUE,
   ylim = c(0,1.2),
-  label = 5,
+  label = 2,
   gPars = gPars)
 dev.off()
 
@@ -685,7 +749,7 @@ uCalc = dat[['sigma']]
 E   = Ref - Calc
 uE  = uCalc
 
-png(file = paste0(figDir,'/Fig_07c.png'),
+png(file = paste0(figDir,'/Fig_',numFig,'c.png'),
     width = gPars$reso, height = gPars$reso)
 ErrViewLib::plotEvsPU(
   uE, E,
@@ -697,7 +761,7 @@ ErrViewLib::plotEvsPU(
   gPars = gPars)
 dev.off()
 
-png(file = paste0(figDir,'/Fig_07f.png'),
+png(file = paste0(figDir,'/Fig_',numFig,'d.png'),
     width = gPars$reso, height = gPars$reso)
 ErrViewLib::plotConfidence(
   E, uE,
@@ -705,11 +769,13 @@ ErrViewLib::plotConfidence(
   probref = TRUE,
   conf_probref = TRUE,
   ylim = c(0,1.2),
-  label = 6,
+  label = 4,
   gPars = gPars)
 dev.off()
 
-# Fig_08 ####
+# Fig_09 ####
+numFig = '09'
+
 D = read.csv('../Data/LIN2021_RBFE.csv', header = TRUE,
              check.names = FALSE, stringsAsFactors = FALSE)
 
@@ -741,7 +807,7 @@ ErrViewLib::varZCI(Eb/uEb_aug,method = "cho")
 xlab1 = expression(Calculated~paste(Delta,Delta,G)~group("[",kcal/mol,"]"))
 
 label = 1
-png(file = paste0(figDir,'/Fig_08a.png'),
+png(file = paste0(figDir,'/Fig_',numFig,'a.png'),
     width = gPars$reso, height = gPars$reso)
 ErrViewLib::plotDistHist(
   V, E, uy = uE,
@@ -773,7 +839,7 @@ logX = TRUE
 xlab = 'uE [kcal/mol]'
 ylab = 'Error [kcal/mol]'
 
-png(file = paste0(figDir,'/Fig_08b.png'),
+png(file = paste0(figDir,'/Fig_',numFig,'b.png'),
     width = gPars$reso, height = gPars$reso)
 ErrViewLib::plotEvsPU(
   uE, E,
@@ -790,7 +856,7 @@ ErrViewLib::plotEvsPU(
 )
 dev.off()
 
-png(file = paste0(figDir,'/Fig_08c.png'),
+png(file = paste0(figDir,'/Fig_',numFig,'c.png'),
     width = gPars$reso, height = gPars$reso)
 ErrViewLib::plotConfidence(
   E, uE,
@@ -818,7 +884,7 @@ legend(
 dev.off()
 
 label = 4
-png(file = paste0(figDir,'/Fig_08d.png'),
+png(file = paste0(figDir,'/Fig_',numFig,'d.png'),
     width = gPars$reso, height = gPars$reso)
 ErrViewLib::plotDistHist(
   V, Eb, uy = uEb,
@@ -843,7 +909,7 @@ if(label > 0)
     line = 0.3)
 dev.off()
 
-png(file = paste0(figDir,'/Fig_08e.png'),
+png(file = paste0(figDir,'/Fig_',numFig,'e.png'),
     width = gPars$reso, height = gPars$reso)
 ErrViewLib::plotEvsPU(
   uEb, Eb,
@@ -894,7 +960,7 @@ dev.off()
 # )
 # dev.off()
 
-png(file = paste0(figDir,'/Fig_08f.png'),
+png(file = paste0(figDir,'/Fig_',numFig,'f.png'),
     width = gPars$reso, height = gPars$reso)
 ErrViewLib::plotLZV(
   V, Z,
@@ -928,7 +994,8 @@ legend(
 dev.off()
 
 
-# Fig_09 ####
+# Fig_10 ####
+numFig = '10'
 
 D = read.table('../Data/ZHE2022_AIQM1.csv',
                sep = ",", header = TRUE,
@@ -969,7 +1036,7 @@ runQuant = TRUE
 cumMAE = FALSE
 ylab = 'Error [kcal/mol]'
 
-png(file = paste0(figDir,'/Fig_09a.png'),
+png(file = paste0(figDir,'/Fig_',numFig,'a.png'),
     width = gPars$reso, height = gPars$reso)
 ErrViewLib::plotEvsPU(
   uEa, Ea,
@@ -988,7 +1055,7 @@ ErrViewLib::plotEvsPU(
 )
 dev.off()
 
-png(file = paste0(figDir,'/Fig_09b.png'),
+png(file = paste0(figDir,'/Fig_',numFig,'b.png'),
     width = gPars$reso, height = gPars$reso)
 ErrViewLib::plotEvsPU(
   uEb, Eb,
@@ -1007,7 +1074,7 @@ ErrViewLib::plotEvsPU(
 )
 dev.off()
 
-png(file = paste0(figDir,'/Fig_09c.png'),
+png(file = paste0(figDir,'/Fig_',numFig,'c.png'),
     width = gPars$reso, height = gPars$reso)
 ErrViewLib::plotConfidence(
   Ea, uEa,
@@ -1021,7 +1088,7 @@ ErrViewLib::plotConfidence(
 )
 dev.off()
 
-png(file = paste0(figDir,'/Fig_09d.png'),
+png(file = paste0(figDir,'/Fig_',numFig,'d.png'),
     width = gPars$reso, height = gPars$reso)
 ErrViewLib::plotConfidence(
   Eb, uEb,
@@ -1035,7 +1102,7 @@ ErrViewLib::plotConfidence(
 )
 dev.off()
 
-png(file = paste0(figDir,'/Fig_09e.png'),
+png(file = paste0(figDir,'/Fig_',numFig,'e.png'),
     width = gPars$reso, height = gPars$reso)
 
 lims = c(0.04,60)
