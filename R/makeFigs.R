@@ -285,6 +285,7 @@ ErrViewLib::plotLCP(
   slide = TRUE,
   ylim = c(0.7,1),
   title = 'SYNT01',
+  xlab = 'Predicted value, V',
   label = 1,
   gPars = gPars
 )
@@ -301,6 +302,7 @@ ErrViewLib::plotLCP(
   slide = TRUE,
   ylim = c(0.7,1),
   title = 'SYNT03',
+  xlab = 'Predicted value, V',
   label = 2,
   gPars = gPars
 )
@@ -315,8 +317,9 @@ ErrViewLib::plotLRR(
   mycols = 2,
   nBin = 6,
   slide = FALSE,
-  title = 'SYNT02',
+  title = 'SYNT03',
   ylim = c(0,3),
+  xlab = 'Predicted value, V',
   label = 3,
   gPars = gPars
 )
@@ -462,14 +465,13 @@ E  = R-C
 
 logX = TRUE
 xlim = range(c(ua,ub))
-xlab = 'U95'
 
 runExt = FALSE
 runQuant = TRUE
 logX = TRUE
 xlim = range(c(ua,ub))
-xlab = 'U95'
-ylab = 'Error'
+xlab = 'Prediction uncertainty, U95'
+ylab = 'Error, E'
 
 png(file = paste0(figDir,'/Fig_06a.png'),
     width = gPars$reso, height = gPars$reso)
@@ -509,7 +511,6 @@ dev.off()
 logX = TRUE
 slide = FALSE
 xlim = range(c(ua,ub))
-xlab = 'U95'
 
 png(file = paste0(figDir,'/Fig_06c.png'),
     width = gPars$reso, height = gPars$reso)
@@ -620,7 +621,7 @@ ErrViewLib::plotLCP(
   nBin = 4,
   mycols = 2,
   # title = 'SYNT03',
-  xlab = 'Expanded Uncertainty [kcal/mol]',
+  xlab = 'Prediction uncertainty, U95 [kcal/mol]',
   ylim = c(0.8,1),
   label = 2,
   gPars = gPars
@@ -641,42 +642,6 @@ dev.off()
 
 # Fig_08 ####
 numFig = '08'
-
-# ## BAK2021 ####
-# D = read.table('../Data/BAK2021_Data.csv',
-#                sep = ",", header = TRUE,
-#                check.names = FALSE,
-#                stringsAsFactors = FALSE)
-# systems = D[,1]
-# R  = D[,2]
-# C  = D[,3]
-# uC = D[,4] # U95
-# E  = R-C
-# uE = uC
-#
-# png(file = paste0(figDir,'/Fig_',numFig,'a.png'),
-#     width = gPars$reso, height = gPars$reso)
-# ErrViewLib::plotEvsPU(
-#   uE, E,
-#   runQuant = TRUE,
-#   logX  = TRUE,
-#   title = 'BAK2021',
-#   xlab = 'Prediction uncertainty, U95',
-#   scalePoints = scalePoints,
-#   label = 1,
-#   gPars = gPars)
-# dev.off()
-#
-# png(file = paste0(figDir,'/Fig_',numFig,'d.png'),
-#     width = gPars$reso, height = gPars$reso)
-# ErrViewLib::plotConfidence(
-#   E, uE,
-#   oracle = FALSE,
-#   probref = TRUE,
-#   conf_probref = TRUE,
-#   label = 4,
-#   gPars = gPars)
-# dev.off()
 
 ## PAN2015 ####
 fileName = '../Data/PAN2015_Data.csv'
@@ -718,6 +683,8 @@ png(file = paste0(figDir,'/Fig_',numFig,'a.png'),
     width = gPars$reso, height = gPars$reso)
 ErrViewLib::plotEvsPU(
   uE, E,
+  xlab = 'Prediction uncertainty, uE [kcal/mol]',
+  ylab = 'Error, E [kcal/mol]',
   runQuant = TRUE,
   logX = TRUE,
   title = 'PAN2015',
@@ -753,6 +720,8 @@ png(file = paste0(figDir,'/Fig_',numFig,'c.png'),
     width = gPars$reso, height = gPars$reso)
 ErrViewLib::plotEvsPU(
   uE, E,
+  xlab = 'Prediction uncertainty, uE [meV]',
+  ylab = 'Error, E [meV]',
   runQuant = TRUE,
   logX = TRUE,
   title = 'PAR2019',

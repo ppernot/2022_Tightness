@@ -141,7 +141,7 @@ Z  = rest[['Normal']]
 ErrViewLib::plotLZV(
   uE, Z,
   method = 'cho',
-  xlab = 'uE',
+  xlab = 'Prediction uncertainty, uE',
   varZ = (N-1)/(N-3),
   label = 3,
   gPars = gPars
@@ -243,7 +243,7 @@ for (k in seq_along(ftabp)) {
     plot(
       nSeq,resuVarT[[ftabp[k]]],
       type = 'l', log = 'x',
-      xlab = 'n',
+      xlab = 'Sample size, n',
       ylab = 'Var(T)',
       ylim = c(0.95,3),
       col=gPars$cols[k])
@@ -331,7 +331,7 @@ png(file = paste0(figDir,'/Fig_A04c.png'),
 ErrViewLib::plotLZV(
   resuH, restH,
   method = 'cho',
-  xlab = 'uE',
+  xlab = 'Prediction uncertainty, uE',
   nBin = 10,
   slide = FALSE,
   ylim = c(0,4),
@@ -349,6 +349,7 @@ ErrViewLib::plotLZV(
   nBin = 10,
   slide = FALSE,
   ylim = c(0,4),
+  xlab = 'Predicted value, V',
   varZ =(N-1)/(N-3),
   label = 4,
   gPars = gPars
@@ -414,7 +415,7 @@ png(file = paste0(figDir,'/Fig_A05c.png'),
 ErrViewLib::plotLZV(
   resuH, restH,
   method = 'cho',
-  xlab = 'uE',
+  xlab = 'Prediction uncertainty, uE',
   nBin = 10,
   slide = FALSE,
   ylim = c(0,4),
@@ -431,6 +432,7 @@ ErrViewLib::plotLZV(
   method = 'cho',
   nBin = 10,
   slide = FALSE,
+  xlab = 'Predicted value, V',
   ylim = c(0,4),
   varZ =(N-1)/(N-3),
   label = 4,
